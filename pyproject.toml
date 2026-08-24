@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "odoo-company-bootstrapper"
-version = "1.1.0"
-description = "برنامج ذكي لإنشاء هيكل شركة كامل داخل أودو — مخصص للبحرين مع واجهة سطح مكتب"
+version = "1.2.0"
+description = "إنشاء شركة في أودو — البحرين، نظام ساعات، واجهة ويب منفذ 80"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [{name = "Odoo Company Bootstrapper"}]
-keywords = ["odoo", "ai", "claude", "bootstrap", "erp", "hr", "bahrain"]
+keywords = ["odoo", "ai", "claude", "bahrain", "hourly"]
 dependencies = [
     "typer[all]>=0.12.0",
     "rich>=13.0.0",
@@ -21,11 +21,11 @@ dependencies = [
     "requests>=2.31.0",
     "httpx>=0.27.0",
     "openpyxl>=3.1.0",
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.27.0",
+    "python-multipart>=0.0.9",
     "customtkinter>=5.2.0",
 ]
-
-[project.optional-dependencies]
-dev = ["pytest", "black", "ruff"]
 
 [project.scripts]
 odoo-bootstrap = "odoo_bootstrapper.cli:app"
