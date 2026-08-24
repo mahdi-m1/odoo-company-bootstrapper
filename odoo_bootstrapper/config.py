@@ -1,4 +1,4 @@
-"""إدارة الإعدادات"""
+"""إدارة الإعدادات — البحرين + نظام الساعات + مهن ديناميكية"""
 
 from __future__ import annotations
 
@@ -8,11 +8,10 @@ from typing import Optional
 
 import yaml
 from dotenv import load_dotenv
-from pydantic import BaseModel, Field
+from pydantic import Field
 from pydantic_settings import BaseSettings
 
-from .models import OdooConnection, CompanyData, Project, ProductCategory, Employee, InsuranceRules
-
+from .models import OdooConnection
 
 load_dotenv()
 
@@ -62,72 +61,42 @@ def get_default_config_template() -> dict:
             "db": "odoo",
             "username": "admin",
             "password": "changeme",
-            # "api_key": "",
         },
-        "ai": {
-            "provider": "claude",  # claude | anthropic | openai | ollama
-        },
+        "ai": {"provider": "claude"},
         "company": {
             "name": "شركة المثال للتجارة",
-            "tax_id": "300000000000003",
-            "address": "الرياض، المملكة العربية السعودية",
-            "currency": "SAR",
+            "tax_id": "",
+            "address": "المنامة، مملكة البحرين",
+            "currency": "BHD",
             "language": "ar_001",
-            "country_code": "SA",
+            "country_code": "BH",
+            "work_system": "mixed",
             "subsidiaries": [
-                {
-                    "name": "فرع جدة",
-                    "ownership_percentage": 100,
-                    "tax_id": "",
-                    "address": "جدة",
-                    "currency": "SAR",
-                }
+                {"name": "فرع الرفاع", "ownership_percentage": 100, "address": "الرفاع", "currency": "BHD"}
             ],
         },
+        "professions": [
+            {"name": "مدير تقني", "default_hourly_rate": None, "department": "تقنية المعلومات"},
+            {"name": "محاسبة", "default_hourly_rate": None, "department": "المالية"},
+            {"name": "عامل بالساعة", "default_hourly_rate": 2.5, "department": "تشغيل"},
+            {"name": "فني صيانة", "default_hourly_rate": 4.0, "department": "صيانة"},
+        ],
         "projects": [
-            {
-                "name": "مشروع تطوير النظام",
-                "start_date": "2026-01-01",
-                "end_date": "2026-12-31",
-                "budget": 500000,
-                "description": "مشروع تطوير داخلي",
-            }
+            {"name": "مشروع تطوير النظام", "start_date": "2026-01-01", "end_date": "2026-12-31", "budget": 50000}
         ],
         "products": [
-            {
-                "name": "استشارات تقنية",
-                "type": "service",
-                "uom": "Hours",
-                "list_price": 350,
-                "description": "ساعة استشارة تقنية",
-            },
-            {
-                "name": "ترخيص برمجيات",
-                "type": "product",
-                "uom": "Units",
-                "list_price": 5000,
-            },
+            {"name": "استشارات تقنية", "type": "service", "uom": "Hours", "list_price": 40, "hourly_rate": 40},
+            {"name": "صيانة بالساعة", "type": "service", "uom": "Hours", "list_price": 15, "hourly_rate": 15},
+            {"name": "ترخيص برمجيات", "type": "product", "uom": "Units", "list_price": 500},
         ],
         "employees": [
-            {
-                "name": "أحمد محمد",
-                "job_title": "مدير تقني",
-                "salary": 18000,
-                "contract_type": "permanent",
-                "department": "تقنية المعلومات",
-                "work_email": "ahmed@example.com",
-            },
-            {
-                "name": "سارة علي",
-                "job_title": "محاسبة",
-                "salary": 12000,
-                "contract_type": "permanent",
-                "department": "المالية",
-            },
+            {"name": "أحمد محمد", "job_title": "مدير تقني", "wage_type": "monthly", "salary": 1200, "contract_type": "permanent", "department": "تقنية المعلومات"},
+            {"name": "سارة علي", "job_title": "محاسبة", "wage_type": "monthly", "salary": 850, "contract_type": "permanent", "department": "المالية"},
+            {"name": "خالد سعيد", "job_title": "عامل بالساعة", "wage_type": "hourly", "salary": 0, "hourly_rate": 2.5, "expected_hours_per_month": 160, "contract_type": "hourly", "department": "تشغيل"},
         ],
         "insurance": {
-            "employee_contribution_pct": 9.75,
-            "company_contribution_pct": 11.75,
+            "employee_contribution_pct": 8.0,
+            "company_contribution_pct": 18.0,
             "labor_market_fee": 0,
             "other_monthly_deductions": [],
             "health_insurance": None,
