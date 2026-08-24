@@ -1,91 +1,64 @@
 # Odoo Company Bootstrapper — البحرين 🇧🇭
 
-**برنامج ذكي لإنشاء هيكل شركة كامل داخل أودو تلقائياً**  
-مخصص لشركات **مملكة البحرين** مع واجهة سطح مكتب عربية + دعم CLI.
+برنامج لإنشاء هيكل شركة في أودو مع **نظام الساعات** و**مهن/منتجات ديناميكية** وواجهة ويب على **المنفذ 80**.
 
-يستخدم Claude CLI (أو Anthropic / OpenAI / Ollama) لتحويل بيانات الشركة والموظفين والمشاريع وتأمينات SIO إلى أوامر دقيقة، ثم ينفّذها عبر XML-RPC على أودو.
-
----
-
-## المميزات
-
-- واجهة سطح مكتب عربية (CustomTkinter)
-- إعدادات افتراضية للبحرين: عملة **BHD**، دولة **BH**
-- نسب تأمينات **SIO 2026**: موظف **8%** | شركة **18%** (بحرينيين)
-- اتصال مباشر بأودو عبر XML-RPC
-- دعم Claude CLI + Anthropic + OpenAI + Ollama
-- إنشاء: الشركة + الفروع + الأقسام + الوظائف + الموظفون + المشاريع + الأصناف
-- وضع محاكاة (`--dry-run`)
-- استيراد موظفين من Excel/CSV
-
----
-
-## التثبيت
+## التشغيل السريع
 
 ```bash
 git clone https://github.com/mahdi-m1/odoo-company-bootstrapper.git
 cd odoo-company-bootstrapper
-
-python3 -m venv .venv
-source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -e .
 
-# (موصى به)
-npm install -g @anthropic-ai/claude-code
-```
-
----
-
-## التشغيل
-
-### واجهة سطح المكتب
-
-```bash
+# واجهة الويب على المنفذ 80
 odoo-bootstrap ui
+# أو بدون صلاحيات root:
+odoo-bootstrap ui --port 8080
 ```
 
-تبويبات الواجهة:
-1. الاتصال بأودو
-2. الشركة والفروع
-3. الموظفون والتأمين (SIO)
-4. المشاريع والأصناف
-5. تشغيل (توليد خطة + تنفيذ)
+ثم افتح المتصفح: `http://عنوان-السيرفر/` أو `http://localhost:8080/`
 
-### سطر الأوامر
+## المميزات
+
+- **نظام عمل مختلط**: شهري / ساعات / مختلط
+- **مهن حسب الحاجة** مع سعر ساعة اختياري → استقرار `hr.job` في أودو
+- **منتجات وخدمات بالساعة** (وحدة Hours)
+- **موظفون**: راتب شهري أو سعر ساعة + ساعات متوقعة
+- تأمينات **SIO البحرين 2026**: 8% موظف / 18% شركة
+- واجهة ويب عربية RTL على المنفذ **80**
+- CLI + Claude CLI / OpenAI / Ollama
+
+## صفحات الواجهة
+
+| الصفحة | الوظيفة |
+|--------|---------|
+| الإعدادات | اتصال أودو + مزود الذكاء الاصطناعي |
+| الشركة | الاسم، CR، نظام العمل (شهري/ساعات) |
+| المهن | إدخال المهن وأسعار الساعة |
+| المنتجات | خدمات بالساعة أو منتجات |
+| الموظفون | شهري أو hourly |
+| تشغيل | توليد الخطة + التنفيذ |
+
+## أوامر CLI
 
 ```bash
 odoo-bootstrap init
 odoo-bootstrap test
 odoo-bootstrap plan
 odoo-bootstrap run
-odoo-bootstrap run --dry-run
-odoo-bootstrap import-employees employees.xlsx
+odoo-bootstrap ui --port 80
 ```
 
----
+## ملاحظة المنفذ 80
 
-## تأمينات البحرين (SIO 2026)
+على Linux قد تحتاج صلاحيات:
 
-| النوع | حصة الموظف | حصة الشركة | المجموع |
-|--------|------------|------------|---------|
-| بحريني (قطاع خاص) | 8% | 18% | **26%** |
-| مغترب | 1% | 3% + EOSB | حسب الحالة |
-
-- حصة الشركة ترتفع 1% كل يناير حتى 2028
-- يمكن تعديل النسب من الواجهة أو من `config.yaml`
-
----
-
-## مزودي الذكاء الاصطناعي
-
-| المزود | الإعداد |
-|--------|---------|
-| Claude CLI | `provider: claude` |
-| Anthropic API | `provider: anthropic` + `ANTHROPIC_API_KEY` |
-| OpenAI | `provider: openai` + `OPENAI_API_KEY` |
-| Ollama | `provider: ollama` |
-
----
+```bash
+sudo odoo-bootstrap ui
+# أو
+sudo setcap 'cap_net_bind_service=+ep' $(readlink -f $(which python3))
+odoo-bootstrap ui
+```
 
 ## الترخيص
 
