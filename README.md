@@ -1,30 +1,26 @@
-# Odoo Company Bootstrapper — البحرين
+# Odoo Company Bootstrapper — البحرين 🇧🇭
 
 **برنامج ذكي لإنشاء هيكل شركة كامل داخل أودو تلقائياً**  
-مخصص للشركات في **مملكة البحرين** (عملة BHD + تأمينات SIO 2026)
+مخصص لشركات **مملكة البحرين** مع واجهة سطح مكتب عربية + دعم CLI.
 
-يدعم:
-- واجهة سطح مكتب رسومية (Desktop GUI)
-- سطر أوامر CLI
-- Claude CLI / Anthropic / OpenAI / Ollama
+يستخدم Claude CLI (أو Anthropic / OpenAI / Ollama) لتحويل بيانات الشركة والموظفين والمشاريع وتأمينات SIO إلى أوامر دقيقة، ثم ينفّذها عبر XML-RPC على أودو.
 
 ---
 
 ## المميزات
 
+- واجهة سطح مكتب عربية (CustomTkinter)
+- إعدادات افتراضية للبحرين: عملة **BHD**، دولة **BH**
+- نسب تأمينات **SIO 2026**: موظف **8%** | شركة **18%** (بحرينيين)
 - اتصال مباشر بأودو عبر XML-RPC
-- واجهة سطح مكتب عربية كاملة (Flet)
-- نسب التأمينات الاجتماعية SIO 2026:
-  - **البحريني**: موظف 8% + شركة 18% = 26%
-  - **الوافد**: موظف 1% + شركة 3% (إصابات عمل)
-- دعم الجنسية (بحريني / وافد / خليجي) لكل موظف
+- دعم Claude CLI + Anthropic + OpenAI + Ollama
 - إنشاء: الشركة + الفروع + الأقسام + الوظائف + الموظفون + المشاريع + الأصناف
 - وضع محاكاة (`--dry-run`)
 - استيراد موظفين من Excel/CSV
 
 ---
 
-## التثبيت السريع
+## التثبيت
 
 ```bash
 git clone https://github.com/mahdi-m1/odoo-company-bootstrapper.git
@@ -34,105 +30,60 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
 
-# موصى به: Claude CLI
+# (موصى به)
 npm install -g @anthropic-ai/claude-code
-```
-
-أو:
-
-```bash
-curl -sSL https://raw.githubusercontent.com/mahdi-m1/odoo-company-bootstrapper/main/scripts/install.sh | bash
 ```
 
 ---
 
-## الاستخدام
+## التشغيل
 
-### 1. واجهة سطح المكتب (موصى بها)
+### واجهة سطح المكتب
 
 ```bash
-odoo-bootstrap desktop
+odoo-bootstrap ui
 ```
 
-تفتح نافذة رسومية فيها تبويبات:
-- الاتصال والذكاء الاصطناعي
-- الشركة والفروع
-- الموظفون (مع اختيار الجنسية)
-- المشاريع والأصناف
-- التأمينات SIO
-- التنفيذ والسجل
+تبويبات الواجهة:
+1. الاتصال بأودو
+2. الشركة والفروع
+3. الموظفون والتأمين (SIO)
+4. المشاريع والأصناف
+5. تشغيل (توليد خطة + تنفيذ)
 
-### 2. سطر الأوامر
+### سطر الأوامر
 
 ```bash
-odoo-bootstrap init          # إنشاء config.yaml
-odoo-bootstrap test          # اختبار الاتصال
-odoo-bootstrap plan          # توليد الخطة
-odoo-bootstrap run           # تنفيذ
-odoo-bootstrap run --dry-run # محاكاة فقط
+odoo-bootstrap init
+odoo-bootstrap test
+odoo-bootstrap plan
+odoo-bootstrap run
+odoo-bootstrap run --dry-run
 odoo-bootstrap import-employees employees.xlsx
 ```
 
 ---
 
-## إعدادات البحرين الافتراضية
+## تأمينات البحرين (SIO 2026)
 
-| البند | القيمة |
-|-------|--------|
-| العملة | BHD |
-| الدولة | BH |
-| حصة الموظف البحريني | 8% |
-| حصة الشركة (بحريني) | 18% |
-| حصة الموظف الوافد | 1% |
-| حصة الشركة (وافد) | 3% |
+| النوع | حصة الموظف | حصة الشركة | المجموع |
+|--------|------------|------------|---------|
+| بحريني (قطاع خاص) | 8% | 18% | **26%** |
+| مغترب | 1% | 3% + EOSB | حسب الحالة |
 
----
-
-## مزودو الذكاء الاصطناعي
-
-```yaml
-ai:
-  provider: claude    # Claude CLI (الأفضل)
-  # provider: anthropic
-  # provider: openai
-  # provider: ollama
-```
-
-```bash
-export ANTHROPIC_API_KEY=sk-ant-...
-export OPENAI_API_KEY=sk-...
-export OLLAMA_MODEL=llama3.1
-```
+- حصة الشركة ترتفع 1% كل يناير حتى 2028
+- يمكن تعديل النسب من الواجهة أو من `config.yaml`
 
 ---
 
-## الأوامر
+## مزودي الذكاء الاصطناعي
 
-| الأمر | الوصف |
-|-------|--------|
-| `odoo-bootstrap desktop` | فتح واجهة سطح المكتب |
-| `odoo-bootstrap init` | إنشاء ملف إعدادات |
-| `odoo-bootstrap test` | اختبار الاتصال بأودو |
-| `odoo-bootstrap plan` | توليد خطة الإنشاء |
-| `odoo-bootstrap run` | تنفيذ الإنشاء |
-| `odoo-bootstrap import-employees` | استيراد موظفين |
-
----
-
-## Docker
-
-```bash
-docker build -t odoo-bootstrap .
-docker run -it --rm -v $(pwd)/config.yaml:/data/config.yaml odoo-bootstrap run
-```
-
----
-
-## المتطلبات
-
-- Python 3.10+
-- وصول شبكي إلى سيرفر أودو
-- (موصى به) Claude CLI أو مفتاح API
+| المزود | الإعداد |
+|--------|---------|
+| Claude CLI | `provider: claude` |
+| Anthropic API | `provider: anthropic` + `ANTHROPIC_API_KEY` |
+| OpenAI | `provider: openai` + `OPENAI_API_KEY` |
+| Ollama | `provider: ollama` |
 
 ---
 
