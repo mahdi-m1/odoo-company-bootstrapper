@@ -4,15 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "odoo-company-bootstrapper"
-version = "1.0.0"
-description = "برنامج ذكي لإنشاء هيكل شركة كامل داخل أودو تلقائياً باستخدام Claude CLI أو أي LLM"
+version = "1.1.0"
+description = "برنامج ذكي لإنشاء هيكل شركة كامل داخل أودو — مخصص للبحرين مع واجهة سطح مكتب"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
-authors = [
-    {name = "Odoo Company Bootstrapper"}
-]
-keywords = ["odoo", "ai", "claude", "bootstrap", "erp", "hr"]
+authors = [{name = "Odoo Company Bootstrapper"}]
+keywords = ["odoo", "ai", "claude", "bootstrap", "erp", "hr", "bahrain"]
 dependencies = [
     "typer[all]>=0.12.0",
     "rich>=13.0.0",
@@ -23,6 +21,7 @@ dependencies = [
     "requests>=2.31.0",
     "httpx>=0.27.0",
     "openpyxl>=3.1.0",
+    "customtkinter>=5.2.0",
 ]
 
 [project.optional-dependencies]
@@ -34,6 +33,3 @@ odoo-bootstrap = "odoo_bootstrapper.cli:app"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["odoo_bootstrapper*"]
-
-[tool.setuptools.package-data]
-odoo_bootstrapper = ["templates/*"]
