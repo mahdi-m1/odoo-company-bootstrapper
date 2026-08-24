@@ -1,3 +1,3 @@
-"""Odoo Company Bootstrapper - برنامج إنشاء الشركات الذكي لأودو"""
+"""Odoo Company Bootstrapper - برنامج إنشاء الشركات الذكي لأودو (البحرين)"""
 
-__version__ = "1.0.0"
+__version__ = "1.2.0"
