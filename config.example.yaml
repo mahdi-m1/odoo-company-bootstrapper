@@ -1,0 +1,84 @@
+odoo:
+  url: https://your-odoo-instance.com
+  db: odoo
+  username: admin
+  password: changeme
+  # api_key: ""   # استخدمه بدلاً من كلمة المرور إن وُجد
+
+ai:
+  provider: claude   # الخيارات: claude | anthropic | openai | ollama
+
+company:
+  name: شركة المثال للتجارة والتقنية
+  tax_id: "300000000000003"
+  address: الرياض، المملكة العربية السعودية
+  currency: SAR
+  language: ar_001
+  country_code: SA
+  subsidiaries:
+    - name: فرع جدة
+      ownership_percentage: 100
+      tax_id: ""
+      address: جدة
+      currency: SAR
+    - name: فرع الدمام
+      ownership_percentage: 100
+      address: الدمام
+      currency: SAR
+
+projects:
+  - name: مشروع تطوير النظام الداخلي
+    start_date: "2026-01-01"
+    end_date: "2026-12-31"
+    budget: 750000
+    description: تطوير وتحسين أنظمة الشركة
+  - name: مشروع التوسع الإقليمي
+    start_date: "2026-03-01"
+    end_date: "2027-02-28"
+    budget: 1200000
+
+products:
+  - name: استشارات تقنية
+    type: service
+    uom: Hours
+    list_price: 400
+    description: ساعة استشارة تقنية متخصصة
+  - name: تطوير برمجيات مخصصة
+    type: service
+    uom: Hours
+    list_price: 350
+  - name: ترخيص برمجيات سنوي
+    type: product
+    uom: Units
+    list_price: 15000
+
+employees:
+  - name: أحمد محمد العتيبي
+    job_title: مدير تقني
+    salary: 22000
+    contract_type: permanent
+    department: تقنية المعلومات
+    work_email: ahmed@example.com
+  - name: سارة عبدالله القحطاني
+    job_title: مديرة مالية
+    salary: 18000
+    contract_type: permanent
+    department: المالية
+    work_email: sara@example.com
+  - name: خالد سعيد الحربي
+    job_title: مطور برمجيات
+    salary: 14000
+    contract_type: permanent
+    department: تقنية المعلومات
+  - name: نورة فهد الشمري
+    job_title: محاسبة
+    salary: 11000
+    contract_type: permanent
+    department: المالية
+
+insurance:
+  employee_contribution_pct: 9.75
+  company_contribution_pct: 11.75
+  labor_market_fee: 0
+  other_monthly_deductions: []
+  health_insurance: null
