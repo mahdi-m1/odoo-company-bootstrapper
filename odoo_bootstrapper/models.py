@@ -1,9 +1,9 @@
-"""نماذج البيانات باستخدام Pydantic"""
+"""نماذج البيانات باستخدام Pydantic — مخصص للشركات في البحرين"""
 
 from __future__ import annotations
 
 from typing import Optional, List, Literal
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field
 
 
 class OdooConnection(BaseModel):
@@ -19,22 +19,22 @@ class Subsidiary(BaseModel):
     ownership_percentage: float = Field(100.0, ge=0, le=100)
     tax_id: Optional[str] = None
     address: Optional[str] = None
-    currency: str = "SAR"
+    currency: str = "BHD"
 
 
 class CompanyData(BaseModel):
     name: str
     tax_id: Optional[str] = None
     address: Optional[str] = None
-    currency: str = "SAR"
+    currency: str = "BHD"
     language: str = "ar_001"
-    country_code: str = "SA"
+    country_code: str = "BH"
     subsidiaries: List[Subsidiary] = Field(default_factory=list)
 
 
 class Project(BaseModel):
     name: str
-    start_date: Optional[str] = None  # YYYY-MM-DD
+    start_date: Optional[str] = None
     end_date: Optional[str] = None
     budget: Optional[float] = None
     description: Optional[str] = None
@@ -53,24 +53,24 @@ class Employee(BaseModel):
     job_title: str
     salary: float
     contract_type: Literal["permanent", "temporary", "freelance"] = "permanent"
+    nationality: Literal["bahraini", "expat", "gcc"] = "bahraini"
     department: Optional[str] = None
     work_email: Optional[str] = None
     identification_id: Optional[str] = None
 
 
 class InsuranceRules(BaseModel):
-    employee_contribution_pct: float = Field(9.75, description="نسبة حصة الموظف %")
-    company_contribution_pct: float = Field(11.75, description="نسبة حصة الشركة %")
-    labor_market_fee: float = Field(0.0, description="رسوم سوق العمل الشهرية")
-    other_monthly_deductions: List[dict] = Field(
-        default_factory=list,
-        description="خصومات شهرية إضافية: [{'name': '...', 'amount': 100}]",
-    )
+    """نسب SIO البحرين 2026 — بحريني 8%/18% | وافد 1%/3%"""
+    employee_contribution_pct: float = Field(8.0, description="حصة الموظف البحريني %")
+    company_contribution_pct: float = Field(18.0, description="حصة الشركة عن البحريني %")
+    expat_employee_pct: float = Field(1.0, description="حصة الموظف الوافد %")
+    expat_company_pct: float = Field(3.0, description="حصة الشركة عن الوافد %")
+    labor_market_fee: float = Field(0.0, description="رسوم LMRA شهرية (BHD)")
+    other_monthly_deductions: List[dict] = Field(default_factory=list)
     health_insurance: Optional[float] = None
 
 
 class BootstrapRequest(BaseModel):
-    """الطلب الكامل لإنشاء الشركة"""
     company: CompanyData
     projects: List[Project] = Field(default_factory=list)
     products: List[ProductCategory] = Field(default_factory=list)
