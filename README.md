@@ -1,43 +1,44 @@
-# Odoo Company Bootstrapper
+# Odoo Company Bootstrapper — البحرين
 
-**برنامج ذكي لإنشاء هيكل شركة كامل داخل أودو تلقائياً**
+**برنامج ذكي لإنشاء هيكل شركة كامل داخل أودو تلقائياً**  
+مخصص للشركات في **مملكة البحرين** (عملة BHD + تأمينات SIO 2026)
 
-يستخدم Claude CLI (أو Anthropic API / OpenAI / Ollama) لتحويل بيانات الشركة والموظفين والمشاريع والتأمينات إلى سلسلة أوامر دقيقة، ثم ينفّذها عبر XML-RPC على أودو.
-
-مصمم ليعمل بسهولة على **VPS** أو أي خادم Linux.
+يدعم:
+- واجهة سطح مكتب رسومية (Desktop GUI)
+- سطر أوامر CLI
+- Claude CLI / Anthropic / OpenAI / Ollama
 
 ---
 
 ## المميزات
 
 - اتصال مباشر بأودو عبر XML-RPC
-- دعم **Claude CLI** (الأفضل) + Anthropic API + OpenAI + Ollama
-- إنشاء: الشركة + الشركات التابعة + الأقسام + الوظائف + الموظفون + العقود + المشاريع + الأصناف
-- دعم نسب التأمينات الاجتماعية ورسوم سوق العمل
+- واجهة سطح مكتب عربية كاملة (Flet)
+- نسب التأمينات الاجتماعية SIO 2026:
+  - **البحريني**: موظف 8% + شركة 18% = 26%
+  - **الوافد**: موظف 1% + شركة 3% (إصابات عمل)
+- دعم الجنسية (بحريني / وافد / خليجي) لكل موظف
+- إنشاء: الشركة + الفروع + الأقسام + الوظائف + الموظفون + المشاريع + الأصناف
 - وضع محاكاة (`--dry-run`)
 - استيراد موظفين من Excel/CSV
-- واجهة سطر أوامر عربية كاملة مع ألوان وتقارير
 
 ---
 
-## التثبيت السريع على VPS
+## التثبيت السريع
 
 ```bash
-# 1. استنساخ المستودع
 git clone https://github.com/mahdi-m1/odoo-company-bootstrapper.git
 cd odoo-company-bootstrapper
 
-# 2. إنشاء بيئة افتراضية وتثبيت
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
 
-# 3. (اختياري لكن موصى به) تثبيت Claude CLI
+# موصى به: Claude CLI
 npm install -g @anthropic-ai/claude-code
-# أو استخدم أي مزود آخر عبر متغيرات البيئة
 ```
 
-أو استخدم سكربت التثبيت:
+أو:
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/mahdi-m1/odoo-company-bootstrapper/main/scripts/install.sh | bash
@@ -45,157 +46,84 @@ curl -sSL https://raw.githubusercontent.com/mahdi-m1/odoo-company-bootstrapper/m
 
 ---
 
-## الاستخدام السريع
+## الاستخدام
+
+### 1. واجهة سطح المكتب (موصى بها)
 
 ```bash
-# إنشاء ملف إعدادات نموذجي
-odoo-bootstrap init
+odoo-bootstrap desktop
+```
 
-# عدّل config.yaml وضع بيانات أودو والشركة
+تفتح نافذة رسومية فيها تبويبات:
+- الاتصال والذكاء الاصطناعي
+- الشركة والفروع
+- الموظفون (مع اختيار الجنسية)
+- المشاريع والأصناف
+- التأمينات SIO
+- التنفيذ والسجل
 
-# اختبار الاتصال
-odoo-bootstrap test
+### 2. سطر الأوامر
 
-# توليد الخطة فقط (مراجعة)
-odoo-bootstrap plan
-
-# تنفيذ الإنشاء
-odoo-bootstrap run
-
-# محاكاة بدون تنفيذ فعلي
-odoo-bootstrap run --dry-run
-
-# استيراد موظفين من Excel
+```bash
+odoo-bootstrap init          # إنشاء config.yaml
+odoo-bootstrap test          # اختبار الاتصال
+odoo-bootstrap plan          # توليد الخطة
+odoo-bootstrap run           # تنفيذ
+odoo-bootstrap run --dry-run # محاكاة فقط
 odoo-bootstrap import-employees employees.xlsx
 ```
 
 ---
 
-## إعداد الذكاء الاصطناعي
+## إعدادات البحرين الافتراضية
 
-### 1. Claude CLI (موصى به)
+| البند | القيمة |
+|-------|--------|
+| العملة | BHD |
+| الدولة | BH |
+| حصة الموظف البحريني | 8% |
+| حصة الشركة (بحريني) | 18% |
+| حصة الموظف الوافد | 1% |
+| حصة الشركة (وافد) | 3% |
 
-```bash
-npm install -g @anthropic-ai/claude-code
-# سجّل الدخول عند أول استخدام
-claude
-```
+---
 
-في `config.yaml`:
+## مزودو الذكاء الاصطناعي
 
 ```yaml
 ai:
-  provider: claude
+  provider: claude    # Claude CLI (الأفضل)
+  # provider: anthropic
+  # provider: openai
+  # provider: ollama
 ```
-
-### 2. Anthropic API مباشرة
 
 ```bash
 export ANTHROPIC_API_KEY=sk-ant-...
-```
-
-```yaml
-ai:
-  provider: anthropic
-```
-
-### 3. OpenAI
-
-```bash
 export OPENAI_API_KEY=sk-...
-```
-
-```yaml
-ai:
-  provider: openai
-```
-
-### 4. Ollama (محلي)
-
-```bash
-# شغّل ollama serve ثم
 export OLLAMA_MODEL=llama3.1
 ```
 
-```yaml
-ai:
-  provider: ollama
-```
-
 ---
 
-## هيكل ملف config.yaml
-
-```yaml
-odoo:
-  url: https://your-odoo.com
-  db: odoo
-  username: admin
-  password: secret
-  # api_key: ""   # بديل لكلمة المرور
-
-ai:
-  provider: claude   # claude | anthropic | openai | ollama
-
-company:
-  name: شركة المثال
-  tax_id: "300000000000003"
-  address: الرياض
-  currency: SAR
-  language: ar_001
-  country_code: SA
-  subsidiaries:
-    - name: فرع جدة
-      ownership_percentage: 100
-
-projects:
-  - name: مشروع تطوير
-    start_date: "2026-01-01"
-    budget: 500000
-
-products:
-  - name: استشارات
-    type: service
-    list_price: 350
-
-employees:
-  - name: أحمد محمد
-    job_title: مدير تقني
-    salary: 18000
-    contract_type: permanent
-    department: تقنية المعلومات
-
-insurance:
-  employee_contribution_pct: 9.75
-  company_contribution_pct: 11.75
-  labor_market_fee: 0
-```
-
----
-
-## الأوامر المتاحة
+## الأوامر
 
 | الأمر | الوصف |
 |-------|--------|
-| `odoo-bootstrap init` | إنشاء ملف إعدادات نموذجي |
+| `odoo-bootstrap desktop` | فتح واجهة سطح المكتب |
+| `odoo-bootstrap init` | إنشاء ملف إعدادات |
 | `odoo-bootstrap test` | اختبار الاتصال بأودو |
 | `odoo-bootstrap plan` | توليد خطة الإنشاء |
 | `odoo-bootstrap run` | تنفيذ الإنشاء |
-| `odoo-bootstrap import-employees <file>` | استيراد موظفين من Excel/CSV |
+| `odoo-bootstrap import-employees` | استيراد موظفين |
 
 ---
 
-## التشغيل كخدمة على VPS (اختياري)
-
-يمكنك وضع البرنامج خلف systemd أو تشغيله يدوياً عند الحاجة. البرنامج لا يحتاج إلى خادم ويب دائم — هو أداة CLI.
-
----
-
-## Docker (اختياري)
+## Docker
 
 ```bash
 docker build -t odoo-bootstrap .
-docker run -it --rm -v $(pwd)/config.yaml:/app/config.yaml odoo-bootstrap run
+docker run -it --rm -v $(pwd)/config.yaml:/data/config.yaml odoo-bootstrap run
 ```
 
 ---
@@ -204,7 +132,7 @@ docker run -it --rm -v $(pwd)/config.yaml:/app/config.yaml odoo-bootstrap run
 
 - Python 3.10+
 - وصول شبكي إلى سيرفر أودو
-- (موصى به) Claude CLI أو مفتاح API لأي مزود ذكاء اصطناعي
+- (موصى به) Claude CLI أو مفتاح API
 
 ---
 
